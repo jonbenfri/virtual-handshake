@@ -27,6 +27,8 @@ import android.os.Message;
 
 import com.example.android.common.logger.Log;
 
+
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -55,6 +57,7 @@ public class BluetoothChatService {
     // Member fields
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
+    public final Context ccontext;
     private AcceptThread mSecureAcceptThread;
     private AcceptThread mInsecureAcceptThread;
     private ConnectThread mConnectThread;
@@ -79,6 +82,7 @@ public class BluetoothChatService {
         mState = STATE_NONE;
         mNewState = mState;
         mHandler = handler;
+        ccontext = context;
     }
 
     /**
@@ -99,6 +103,10 @@ public class BluetoothChatService {
     public synchronized int getState() {
         return mState;
     }
+    public synchronized Context getCurrentContext() {
+        return ccontext;
+    }
+
 
     /**
      * Start the chat service. Specifically start AcceptThread to begin a
@@ -509,6 +517,7 @@ public class BluetoothChatService {
          *
          * @param buffer The bytes to write
          */
+
         public void write(byte[] buffer) {
             try {
                 mmOutStream.write(buffer);

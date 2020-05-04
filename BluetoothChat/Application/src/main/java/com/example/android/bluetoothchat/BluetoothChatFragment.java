@@ -46,6 +46,8 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.android.common.logger.Log;
 
+import static android.content.Context.VIBRATOR_SERVICE;
+
 /**
  * This fragment controls Bluetooth to communicate with other devices.
  */
@@ -308,12 +310,14 @@ public class BluetoothChatFragment extends Fragment {
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
                     mConversationArrayAdapter.add("Me:  " + writeMessage);
+                    ((MainActivity)getActivity()).vibrate();
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                    ((MainActivity)getActivity()).vibrate();
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name

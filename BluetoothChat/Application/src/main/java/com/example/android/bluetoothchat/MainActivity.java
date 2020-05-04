@@ -17,7 +17,10 @@
 
 package com.example.android.bluetoothchat;
 
+import android.Manifest;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ViewAnimator;
@@ -111,4 +114,12 @@ public class MainActivity extends SampleActivityBase {
 
         Log.i(TAG, "Ready");
     }
+
+    /** Vibrates the phone. */
+    public void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(400);
+    }
+
 }
+
