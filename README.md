@@ -18,5 +18,5 @@ User Instructions
 
 1. In the Virtual Handshake app, click the Bluetooth icon in upper-right corner and select paired device.
 
-1. After successfully connecting, press the "shake" button. You can hold down the button.
+1. After successfully connecting, press and hold the "shake" button.
 
