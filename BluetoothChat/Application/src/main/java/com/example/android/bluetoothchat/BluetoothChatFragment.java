@@ -16,6 +16,7 @@
 
 package com.example.android.bluetoothchat;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -24,11 +25,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -64,6 +67,7 @@ public class BluetoothChatFragment extends Fragment {
     private ListView mConversationView;
     private EditText mOutEditText;
     private Button mSendButton;
+    private Button mShakeButton;
 
     /**
      * Name of the connected device
@@ -157,6 +161,8 @@ public class BluetoothChatFragment extends Fragment {
         mConversationView = view.findViewById(R.id.in);
         mOutEditText = view.findViewById(R.id.edit_text_out);
         mSendButton = view.findViewById(R.id.button_send);
+        mShakeButton = view.findViewById(R.id.button_shake);
+        // view.setHapticFeedbackEnabled(true);
     }
 
     /**
@@ -182,11 +188,59 @@ public class BluetoothChatFragment extends Fragment {
             public void onClick(View v) {
                 // Send a message using content of the edit text widget
                 View view = getView();
+                //((MainActivity)getActivity()).vibrate();
                 if (null != view) {
                     TextView textView = view.findViewById(R.id.edit_text_out);
                     String message = textView.getText().toString();
                     sendMessage(message);
                 }
+            }
+        });
+
+//        mShakeButton.setOnLongClickListener(new View.OnLongClickListener() {
+//            public boolean onLongClick(View v) {
+//                // Send a message using content of the edit text widget
+//                // ((MainActivity)getActivity()).vibrate();
+//                if (null != v) {
+//                    String message = "{viib}";
+//                    sendMessage(message);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+
+        mShakeButton.setOnTouchListener(new View.OnTouchListener() {
+            //@Override
+            public boolean performClick(View v) {
+                //super.performClick();
+                if (null != v) {
+                    String message = "{viib}";
+                    // v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    sendMessage(message);
+                    return true;
+                }
+                return false;
+            }
+
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Send a message using content of the edit text widget
+                // ((MainActivity)getActivity()).vibrate();
+                if (null != v) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_UP:
+                            // performClick(v);   // call performClick() here, that is the same as some accessibility function would do
+                            // TODO: Stop vibrating
+                            return true;
+                        case MotionEvent.ACTION_DOWN:
+                            // TODO: keep vibrating
+                            performClick(v);
+                            return true;
+                        }
+                    }
+                return false;
             }
         });
 
@@ -310,7 +364,6 @@ public class BluetoothChatFragment extends Fragment {
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
                     mConversationArrayAdapter.add("Me:  " + writeMessage);
-                    ((MainActivity)getActivity()).vibrate();
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
