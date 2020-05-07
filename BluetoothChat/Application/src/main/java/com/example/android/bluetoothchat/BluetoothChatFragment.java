@@ -68,6 +68,7 @@ public class BluetoothChatFragment extends Fragment {
     private EditText mOutEditText;
     private Button mSendButton;
     private Button mShakeButton;
+    private Handler rHandler;
 
     /**
      * Name of the connected device
@@ -232,16 +233,31 @@ public class BluetoothChatFragment extends Fragment {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_UP:
                             // performClick(v);   // call performClick() here, that is the same as some accessibility function would do
-                            // TODO: Stop vibrating
-                            return true;
+                            // Stop vibrating
+                            if (rHandler == null) return true;
+                            rHandler.removeCallbacks(rAction);
+                            rHandler = null;
+                            // button.setOnTouchListener(null);
+                            return false;
                         case MotionEvent.ACTION_DOWN:
-                            // TODO: keep vibrating
-                            performClick(v);
-                            return true;
+                            // Keep vibrating
+                            //performClick(v);
+                            if (rHandler != null) return true;
+                            rHandler = new Handler();
+                            rHandler.postDelayed(rAction, 0);
+                            break;
                         }
                     }
-                return false;
+                return true;
             }
+
+            Runnable rAction = new Runnable() {
+                View view = getView();
+                @Override public void run() {
+                    performClick(view);
+                    rHandler.postDelayed(this, 100);
+                }
+            };
         });
 
         // Initialize the BluetoothChatService to perform bluetooth connections
