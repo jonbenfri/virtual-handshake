@@ -16,7 +16,7 @@ User Instructions
 
 1. Pair two Android devices over Bluetooth
 
-1. In the Virtual Handshake app, click the Bluetooth icon in upper-right corner and set up an active connection.
+1. In the Virtual Handshake app, click the Bluetooth icon in upper-right corner and select paired device.
 
 1. After successfully connecting, press the "shake" button. You can hold down the button.
 
